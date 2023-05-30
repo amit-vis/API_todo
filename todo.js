@@ -5,7 +5,22 @@ const tasksCounter = document.getElementById('tasks-counter');
 
 function renderList(){}
 
-function markTaskAsComplete(taskId){}
+function ToggleTask(taskId){
+    const task = tasks.filter(function(task){
+        return task.id == taskId
+    });
+
+    if (tasks.length >0){
+        const currentTask = task[0];
+
+        currentTask.done = !currentTask.done;
+        renderList();
+        showNotification('task toggled successfully');
+        return;
+    }
+
+    showNotification('could not toggle the task')
+}
 
 function deleteTask(taskId){
     const newTasks = tasks.filter(function(task){
