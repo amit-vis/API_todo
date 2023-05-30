@@ -1,9 +1,30 @@
 let tasks = [];
-const taskList = document.getElementById('list');
+const tasksList = document.getElementById('list');
 const addTaskInput = document.getElementById('add');
 const tasksCounter = document.getElementById('tasks-counter');
 
-function renderList(){}
+console.log(tasksList)
+
+function addTaskToDom(task){
+    const li = document.createElement('li');
+
+    li.innerHTML = `
+                    <input type="checkbox" id="${task.id}" ${task.done ? 'checked' : ''} class="custom-checkbox">
+                    <label for="${task.id}">${task.text}</label>
+                    <img src="bin.png" data-id="${task.id}" class="delete">
+                `;
+
+    tasksList.append(li);
+}
+
+function renderList(){
+    tasksList.innerHTML = '';
+    for (let i =0; i<tasks.length; i++){
+        addTaskToDom(tasks[i]);
+    }
+
+    tasksCounter.innerHTML = tasks.length;
+}
 
 function ToggleTask(taskId){
     const task = tasks.filter(function(task){
