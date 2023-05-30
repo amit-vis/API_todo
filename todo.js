@@ -5,7 +5,7 @@ const tasksCounter = document.getElementById('tasks-counter');
 
 console.log(tasksList)
 
-function addTaskToDom(task){
+function addTaskToDom(task) {
     const li = document.createElement('li');
 
     li.innerHTML = `
@@ -17,21 +17,21 @@ function addTaskToDom(task){
     tasksList.append(li);
 }
 
-function renderList(){
+function renderList() {
     tasksList.innerHTML = '';
-    for (let i =0; i<tasks.length; i++){
+    for (let i = 0; i < tasks.length; i++) {
         addTaskToDom(tasks[i]);
     }
 
     tasksCounter.innerHTML = tasks.length;
 }
 
-function ToggleTask(taskId){
-    const task = tasks.filter(function(task){
+function ToggleTask(taskId) {
+    const task = tasks.filter(function (task) {
         return task.id == taskId
     });
 
-    if (tasks.length >0){
+    if (tasks.length > 0) {
         const currentTask = task[0];
 
         currentTask.done = !currentTask.done;
@@ -43,8 +43,8 @@ function ToggleTask(taskId){
     showNotification('could not toggle the task')
 }
 
-function deleteTask(taskId){
-    const newTasks = tasks.filter(function(task){
+function deleteTask(taskId) {
+    const newTasks = tasks.filter(function (task) {
         return task.id !== taskId
     });
 
@@ -53,8 +53,8 @@ function deleteTask(taskId){
     showNotification('Task deleted successfully');
 }
 
-function addTask(task){
-    if(task){
+function addTask(task) {
+    if (task) {
         tasks.push(task);
         renderList();
         showNotification('Task added successfully');
@@ -64,16 +64,15 @@ function addTask(task){
     showNotification('Task can not be added');
 }
 
-function showNotification(text){
+function showNotification(text) {
     alert(text);
 }
 
-function handleInputKeypress(e){
-    if (e.key == 'Enter'){
+function handleInputKeypress(e) {
+    if (e.key == 'Enter') {
         const text = e.target.value;
-        console.log('text', text)
 
-        if(!text){
+        if (!text) {
             showNotification('Task text can not be empty');
             return;
         }
@@ -88,4 +87,24 @@ function handleInputKeypress(e){
     }
 }
 
-addTaskInput.addEventListener('keyup', handleInputKeypress);
+function handleClickListener(e) {
+    const target = e.target;
+    if (target.className == 'delete') {
+        const taskId = target.dataset.id;
+        deleteTask(taskId);
+        return;
+    }
+
+    else if (target.className == 'custom-checkbox') {
+        const taskId = target.id;
+        ToggleTask(taskId);
+        return;
+    }
+}
+
+function initializeApp() {
+    addTaskInput.addEventListener('keyup', handleInputKeypress);
+    document.addEventListener('click', handleClickListener);
+}
+
+initializeApp();
