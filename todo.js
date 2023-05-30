@@ -3,14 +3,26 @@ const tasksList = document.getElementById('list');
 const addTaskInput = document.getElementById('add');
 const tasksCounter = document.getElementById('tasks-counter');
 
-console.log(tasksList)
+function fetchTodos(){
+    // GET Response
+    fetch('https://jsonplaceholder.typicode.com/todos')
+    .then(function(response){
+        return response.json();
+    }).then(function(data){
+        tasks = data.slice(0,10);
+        renderList();
+    })
+    .catch(function(err){
+        console.log('Error', err);
+    })
+}
 
 function addTaskToDom(task) {
     const li = document.createElement('li');
 
     li.innerHTML = `
-                    <input type="checkbox" id="${task.id}" ${task.done ? 'checked' : ''} class="custom-checkbox">
-                    <label for="${task.id}">${task.text}</label>
+                    <input type="checkbox" id="${task.id}" ${task.completed ? 'checked' : ''} class="custom-checkbox">
+                    <label for="${task.id}">${task.title}</label>
                     <img src="bin.png" data-id="${task.id}" class="delete">
                 `;
 
@@ -28,13 +40,13 @@ function renderList() {
 
 function ToggleTask(taskId) {
     const task = tasks.filter(function (task) {
-        return task.id == taskId
+        return task.id == Number(taskId)
     });
 
     if (tasks.length > 0) {
         const currentTask = task[0];
 
-        currentTask.done = !currentTask.done;
+        currentTask.completed = !currentTask.completed;
         renderList();
         showNotification('task toggled successfully');
         return;
@@ -78,9 +90,9 @@ function handleInputKeypress(e) {
         }
 
         const task = {
-            text,
-            id: Date.now().toString(),
-            done: false
+            title: text,
+            id: Date.now(),
+            completed: false
         }
         e.target.value = '';
         addTask(task)
@@ -103,6 +115,7 @@ function handleClickListener(e) {
 }
 
 function initializeApp() {
+    fetchTodos();
     addTaskInput.addEventListener('keyup', handleInputKeypress);
     document.addEventListener('click', handleClickListener);
 }
