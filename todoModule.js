@@ -1,4 +1,4 @@
-(function () {
+var todoAppModule = (function () {
     let tasks = [];
     const tasksList = document.getElementById('list');
     const addTaskInput = document.getElementById('add');
@@ -149,6 +149,8 @@
         document.addEventListener('click', handleClickListener);
     }
 
-    initializeApp();
+    return {
+        initialize: initializeApp,
+    }
 })();
 
